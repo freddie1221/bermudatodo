@@ -117,3 +117,12 @@ li button {
 li button:hover {
   background: linear-gradient(135deg, #c0392b, #e74c3c);
 }
+
+li input[type="text"] {
+  flex-grow: 1;
+  margin-right: 10px;
+}
+
+li button {
+  margin-left: 5px;
+}

@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
+import { Draggable } from "react-beautiful-dnd";
 
-function TodoItem({ todo, onToggleComplete, onDelete, onUpdate }) {
+function TodoItem({ todo, index, onToggleComplete, onDelete, onUpdate }) {
   const [isEditing, setIsEditing] = useState(false);
   const [editText, setEditText] = useState(todo.text);
 
@@ -19,32 +20,44 @@ function TodoItem({ todo, onToggleComplete, onDelete, onUpdate }) {
   };
 
   return (
-    <li>
-      <input
-        type="checkbox"
-        checked={todo.completed}
-        onChange={() => onToggleComplete(todo.id)}
-      />
-      {isEditing ? (
-        <>
+    <Draggable draggableId={todo.id} index={index}>
+      {(provided) => (
+        <li
+          ref={provided.innerRef}
+          {...provided.draggableProps}
+          {...provided.dragHandleProps}
+        >
           <input
-            type="text"
-            value={editText}
-            onChange={(e) => setEditText(e.target.value)}
+            type="checkbox"
+            checked={todo.completed}
+            onChange={() => onToggleComplete(todo.id)}
           />
-          <button onClick={handleSave}>Save</button>
-          <button onClick={handleCancel}>Cancel</button>
-        </>
-      ) : (
-        <>
-          <span style={{ textDecoration: todo.completed ? 'line-through' : 'none' }}>
-            {todo.text}
-          </span>
-          <button onClick={handleEdit}>Edit</button>
-          <button onClick={() => onDelete(todo.id)}>Delete</button>
-        </>
+          {isEditing ? (
+            <>
+              <input
+                type="text"
+                value={editText}
+                onChange={(e) => setEditText(e.target.value)}
+              />
+              <button onClick={handleSave}>Save</button>
+              <button onClick={handleCancel}>Cancel</button>
+            </>
+          ) : (
+            <>
+              <span
+                style={{
+                  textDecoration: todo.completed ? "line-through" : "none",
+                }}
+              >
+                {todo.text}
+              </span>
+              <button onClick={handleEdit}>Edit</button>
+              <button onClick={() => onDelete(todo.id)}>Delete</button>
+            </>
+          )}
+        </li>
       )}
-    </li>
+    </Draggable>
   );
 }
 
